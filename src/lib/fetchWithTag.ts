@@ -15,19 +15,9 @@ export interface ResponsePayload<T> {
   data?: T | null;
 }
 
-const isServer = typeof window === "undefined";
 const baseUrl = (() => {
-  if (process.env.NEXT_PUBLIC_API_URL) {
-    // Strip trailing slash to prevent double-slash URLs (e.g. //api/blog)
-    const apiRoot = process.env.NEXT_PUBLIC_API_URL.replace(/\/+$/, "");
-    return `${apiRoot}/api`;
-  }
-
-  if (isServer) {
-    return `http://localhost:${process.env.PORT ?? "3000"}/api`;
-  }
-
-  return "/api";
+  const apiRoot = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000").replace(/\/+$/, "");
+  return `${apiRoot}/api`;
 })();
 
 export async function fetchWithTag<T>(
